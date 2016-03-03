@@ -79,12 +79,12 @@ main() {
 			
 			// C Code: no optimization
 			timeStart = MY_TIME_FUNCTION;
-			Output_Data3 = LMS_isrNoOpt(Input_Data); 
+			Output_Data3 = LMS_isrNoOpt(Input_Data);
 			timeEnd = MY_TIME_FUNCTION;
 			timeNoOpt = timeEnd-timeStart;
 			
 			timeStart = MY_TIME_FUNCTION;
-			Output_Data3 = LMS_isrOpt(Input_Data);
+			Output_Data4 = LMS_isrOpt(Input_Data);
 			timeEnd = MY_TIME_FUNCTION;
 			timeOpt = timeEnd-timeStart;
 
