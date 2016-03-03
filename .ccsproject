@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?ccsproject version="1.0"?>
+<projectOptions>
+	<deviceVariant value="TMS320C66XX.TMS320C6678"/>
+	<deviceFamily value="C6000"/>
+	<deviceEndianness value="little"/>
+	<codegenToolVersion value="7.4.8"/>
+	<isElfFormat value="true"/>
+	<connection value="common/targetdb/connections/BH-XDS560v2-USB_Mezzanine.xml"/>
+	<rts value="libc.a"/>
+	<createSlaveProjects value=""/>
+	<templateProperties value="id=com_ti_rtsc_tirtosc6000_example_4.projectspec.clock_TMS320C6678,type=rtsc,products=com.ti.rtsc.TIRTOSc6000,buildProfile=release,isHybrid=true,configuroOptions=--compileOptions &quot;-g --optimize_with_debug&quot;,"/>
+	<isTargetManual value="true"/>
+</projectOptions>
