@@ -6,6 +6,9 @@ The repo is currently public so everyone can pull from it, unsure if we should c
 Compiler optimization:
 Compiler optimization level is determined by the project settings so it always will be overwritten with whatever the level used by last commit was. I recommend using a low optimization level for debugging - the final solution which we will submit will obviously use a high optimization level (o2 or o3, whichever turns out to be better). Note that sometimes o3 can outperform o2, so it is worth checking. Also a variety of bugs can be made manifest when using different optimization levels so be careful.
 
+TODO:
+
+It would be a good thing to clean this project up a bit and udnerstand what all the source files are doing, in particular the adaptive_C.c
 
 Some useful links:
 Tutorials:
