@@ -6,11 +6,14 @@
 #include <stdio.h>
 #define	LENGTH 1024
 
+
+
 /* Prototype */
 short sinegen(void);
 short filter1(short newvalue);
 short filter2(short newvalue);
 extern short LMS_isrNoOpt(short newvalue);
+extern short LMS_isrOpt(short newvalue);
 
 short Input_Data;
 short Output_Data1;
@@ -66,7 +69,7 @@ extern short coef[80];
 
 main() {
 	short i;
-	unsigned int timeNoOpt,timeStart,timeEnd;
+	unsigned int timeNoOpt,timeOpt, timeStart,timeEnd;
 
 	while (!force) {
 		for (i = 0; i < LENGTH; i++) {
@@ -80,6 +83,11 @@ main() {
 			timeEnd = MY_TIME_FUNCTION;
 			timeNoOpt = timeEnd-timeStart;
 			
+			timeStart = MY_TIME_FUNCTION;
+			Output_Data3 = LMS_isrOpt(Input_Data);
+			timeEnd = MY_TIME_FUNCTION;
+			timeOpt = timeEnd-timeStart;
+
 			buffer0[i] = Input_Data;
 			buffer1[i] = Output_Data1;
 			buffer2[i] = Output_Data2;
@@ -92,8 +100,8 @@ main() {
 			// *** To get the results: Enable the Clock and Run the while loop once. ***//
 
 
-				printf("\nC Code w/o Optimisation:      %d cycles\n",timeNoOpt);
-
+				printf("\nC Code w/o code Optimisation:      %d cycles\n",timeNoOpt);
+				printf("\nC Code /w code Optimisation:      %d cycles\n",timeOpt);
 
 
 		}
