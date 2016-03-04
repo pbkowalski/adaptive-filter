@@ -68,7 +68,7 @@ LMS_isrOpt (short D)
 
     int i;
 	short BETA_E;
-	short temp_out;
+	short Y_short;
 //	int BETA_E_PACK;
 	X_opt[0] = D;
 	// D = X[0];
@@ -94,12 +94,12 @@ LMS_isrOpt (short D)
 	{
 		Y = Y + (_mpy(h_opt[i],X_opt[i])) ;
 	}
-	temp_out =  (short)(Y>>15);
+	Y_short =  (short)(Y>>15);
 	//	Y_short= (short)(Y>>15);
 
 
 //Computation 2: calculation of E and BETA_E
-		E = D -(short) (Y>>15);
+		E = D -Y_short;
 		BETA_E = (short)((_mpy(_beta,E)) >>15);
 // 		BETA_E_PACK= _pack2(BETA_E,BETA_E);
 
@@ -132,7 +132,7 @@ LMS_isrOpt (short D)
 
 
 
-	return(temp_out);
+	return(Y_short);
 
 
 }
