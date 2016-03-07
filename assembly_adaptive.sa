@@ -2,10 +2,12 @@
 
  			.global LMS_isrOptsa
 
-LMS_isrOptsa	.cproc	hp, xp, xp2, hp2, beta, cntr, newval
+LMS_isrOptsa	.cproc	hp, xp, xp2, hp2, beta, cntr, cntr2, newval
 ;passing pointers twice as we are constrained by speed rather than number of registers
-		.reg	e, beta_e, a, b, p0, p1, sum0, sum1, y, deltah, newdelta
+		.reg	e, beta_e, a, b, p0, p1, sum0, sum1, y, deltah, newdelta, x_temp1, x_temp2
 ;Load the newval into the first position in the input array X
+		zero sum0
+		zero sum1
 
 	STH newval, *xp
 ;Calc 1, Loop1 - dot product
@@ -22,27 +24,35 @@ LOOP1:	.trip 4,4
 		SHR sum0, (15), y ; dot product of 16 bit values is 32 bit, need to left shift as the result has to be contained in a short
 
 ; Calc 2 - calculate error and beta_e
-	SUB y, newval, e ; y-newval = e
+	SUB newval, y, e ; y-newval = e
 	MPY beta, e, beta_e ; beta*e=beta_e(32)
 	SHR beta_e, (15), beta_e; ; to allow 16 bit arithmetic
+
 
 ; second loop -> h_new = h + x*b_e
 	PACK2 beta_e, beta_e, beta_e ; pack 2 16-bit beta_e's into a 32-bit register
 LOOP2:	.trip 4,4
 
-		LDW *hp2++,a ; load hi & hi+1 from memory
-		LDW *xp2++,b ; load xi & xi+1 from memory
+		LDW *--hp,a ; load hi & hi+1 from memory
+		LDW *--xp,b ; load xi & xi+1 from memory
 		MPY b, beta_e, p0;beta_e*xi
 		MPYH b, beta_e, p1;beta_e*xi+1
 		SHR p0, (15), p0 ; product of 16 bit values is 32 bit, need to left shift as the result has to be contained in a short
 		SHR p1, (15), p1 ; product of 16 bit values is 32 bit, need to left shift as the result has to be contained in a short
-		PACK2 p0, p1, deltah ; for add2 addition
-		ADD2 a, deltah, newdelta ;
-		STW newdelta, *hp2 ;need to check how to reference correct offset
-
 		; shift the x array
-		[cntr] SUB cntr,1,cntr ; decrement loop counter
-		[cntr] B LOOP1 ; branch to loop
+		LDW *--xp,x_temp1
+		LDW *++xp, x_temp2
+
+		PACK2 p1, p0, deltah ; for add2 addition
+		ADD2 a, deltah, newdelta ;
+		STW newdelta, *hp ;need to check how to reference correct offset
+		PACKLH2 x_temp2, x_temp1, x_temp1
+		STW x_temp1, *xp
+
+		;X_opt32[i]=_packlh2(X_opt32[i],X_opt32[i-1]);
+
+		[cntr2] SUB cntr2,1,cntr2 ; decrement loop counter
+		[cntr2] B LOOP2 ; branch to loop
 
 
 	.return y

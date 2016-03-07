@@ -14,8 +14,7 @@ short filter1(short newvalue);
 short filter2(short newvalue);
 extern short LMS_isrNoOpt(short newvalue);
 extern short LMS_isrOpt(short newvalue);
-extern short LMS_isrOptsa(short newvalue);
-
+extern short LMS_isrOptsa(short *h, short *x, short *x2, short *h2, short beta, short cntr, short cntr2, short newvalue);
 short Input_Data;
 short Output_Data1;
 short Output_Data2;
@@ -30,6 +29,10 @@ short A = 32364;
 short z[3] = { 0, 4750, 0 };
 short B = 31164;
 
+short X_sa[8] = {0,0,0,0,0,0,0,0};
+#pragma DATA_ALIGN(X_sa,8)
+short h_sa[8] = {0,0,0,0,0,0,0,0};
+#pragma DATA_ALIGN(h_sa,8)
 short buffer0[LENGTH];
 short buffer1[LENGTH];
 short buffer2[LENGTH];
@@ -38,7 +41,13 @@ short buffer4[LENGTH];
 short buffer5[LENGTH];
 short buffer6[LENGTH];
 short buffer7[LENGTH];
+#ifndef _N
+	#define _N 8
+#endif
 
+#ifndef _beta
+	#define _beta 0x00000174
+#endif
 int my_pE=0;
 // For assembly
 short my_ph[8]={0,0,0,0,0,0,0,0}; // Latest 8 output approaches of the adaptive filter
@@ -79,6 +88,9 @@ main() {
 			Output_Data2 = filter2(Input_Data);
 			
 			// C Code: no optimization
+			if (i==5){
+				printf("break");
+			}
 			timeStart = MY_TIME_FUNCTION;
 			Output_Data3 = LMS_isrNoOpt(Input_Data);
 			timeEnd = MY_TIME_FUNCTION;
@@ -90,7 +102,7 @@ main() {
 			timeOpt = timeEnd-timeStart;
 
 			timeStart = MY_TIME_FUNCTION;
-	//		Output_Data5 = LMS_isrOptsa(Input_Data);
+			Output_Data5 = LMS_isrOptsa(h_sa, X_sa, X_sa, h_sa, _beta, (_N/2), (_N/2), Input_Data);
 			timeEnd = MY_TIME_FUNCTION;
 			timeOptSa = timeEnd-timeStart;
 
