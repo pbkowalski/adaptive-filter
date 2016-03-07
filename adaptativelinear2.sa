@@ -1,0 +1,32 @@
+
+	.global	LinearAssembly4
+
+
+LinearAssembly4:	.cproc	beta, xla, hla, nla
+ 					.reg	x1,x2,h1,h2,sum1,sum2,prod1,prod2,index
+
+            zero x1
+            zero x2
+            zero h1
+            zero h2
+            sub nla,1,index
+
+loop:
+        lddw    *xla--,x1:x2
+        dotp2	x1, beta, prod1
+		add     sum1, prod1, sum1
+		dotp2	x2, beta, prod2
+		add     sum2, prod2, sum2
+
+
+[index] sub 	index, 1, index
+[index]   b   	loop
+
+		add  sum1, sum2, sum1
+		shr  sum1, 15,sum1
+
+
+ 	.return sum1
+	.endproc
+
+

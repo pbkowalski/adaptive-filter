@@ -1,0 +1,15 @@
+
+ 	;.global	LinearAssembly3
+
+
+;LinearAssembly3:	.cproc	b, e
+		;.reg	    betae
+
+
+		;mpy  b,e,betae
+		;shr  betae, 15,betae
+
+ 		;.return betae
+ 		;.endproc
+
+;

@@ -1,0 +1,124 @@
+
+ 	.global	LinearAssembly1
+
+
+;LinearAssembly1:	.cproc	h, x, count
+		;.reg	    x1, x2, h1, h2 , prod1, prod2, sum1, sum2
+
+	;	zero	x1
+		;zero	x2
+		;zero	h1
+		;zero	h2
+
+;loop:	.trip 2
+		;lddw	*h++, x1:x2
+		;lddw	*x++, h1:h2
+
+	;	dotp2	x1, h1, prod1
+	;	add     sum1, prod1, sum1
+	;	dotp2	x2, h2, prod2
+	;	add     sum2, prod2, sum2
+
+;[count]   sub 	count, 4, count
+;[count]   b   	loop
+
+;		add  sum1, sum2, sum1
+	;	shl  sum1, 1,sum1
+
+
+ 	;	.return sum1
+ 	;	.endproc
+
+;--------------------------------------------------
+ 	;.global	LinearAssembly2
+
+
+;LinearAssembly2:	.cproc	d, y
+;		.reg	    e
+
+ ;       shr  y, 16,y
+	;	sub  d,y,e
+
+
+ 	;	.return e
+ 	;	.endproc
+
+;--------------------------------------------------
+ ;	.global	LinearAssembly3
+
+
+;LinearAssembly3:	.cproc	be, er
+		;.reg	    betae
+
+
+		;mpy  be,er,betae
+		;shr  betae, 15,betae
+
+ 		;.return betae
+ 		;.endproc
+
+
+ 		;.global	LinearAssembly1
+;-----------------------------------------------------
+
+LinearAssembly1:	.cproc	h, x, count,d, y, be
+		.reg	    x1, x2, h1, h2 , prod1, prod2, sum1, sum2,yl, betae,e
+
+
+		zero	x1
+		zero	x2
+		zero	h1
+		zero	h2
+
+loop:	.trip 2
+		lddw	*h++, x1:x2
+		lddw	*x++, h1:h2
+
+		dotp2	x1, h1, prod1
+		add     sum1, prod1, sum1
+		dotp2	x2, h2, prod2
+		add     sum2, prod2, sum2
+
+[count]   sub 	count, 4, count
+[count]   b   	loop
+
+		add  sum1, sum2, yl
+		shl  sum1, 1,sum1
+        ; shl yl,1,yl
+      ;  mv sum1,yl
+
+        shr  yl, 16,yl
+		sub  d,yl,e
+
+		mpy  be,e,betae
+		shr  betae, 15,betae
+
+
+ 		.return betae
+ 		.endproc
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
