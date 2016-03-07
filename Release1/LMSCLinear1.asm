@@ -1,6 +1,6 @@
 ;******************************************************************************
-;* G3 TMS320C6x C/C++ Codegen                                       PC v8.0.1 *
-;* Date/Time created: Mon Mar 07 11:12:58 2016                                *
+;* G3 TMS320C6x C/C++ Codegen                                       PC v8.0.0 *
+;* Date/Time created: Mon Mar 07 14:54:39 2016                                *
 ;******************************************************************************
 	.compiler_opts --abi=eabi --array_alignment=8 --c64p_l1d_workaround=off --diag_wrap=off --endian=little --hll_source=on --long_precision_bits=32 --mem_model:code=near --mem_model:const=data --mem_model:data=far_aggregates --object_format=elf --silicon_version=6600 --symdebug:dwarf --symdebug:dwarf_version=3 
 
@@ -28,9 +28,9 @@
 
 $C$DW$CU	.dwtag  DW_TAG_compile_unit
 	.dwattr $C$DW$CU, DW_AT_name("../LMSCLinear1.c")
-	.dwattr $C$DW$CU, DW_AT_producer("TI G3 TMS320C6x C/C++ Codegen PC v8.0.1 Copyright (c) 1996-2015 Texas Instruments Incorporated")
+	.dwattr $C$DW$CU, DW_AT_producer("TI G3 TMS320C6x C/C++ Codegen PC v8.0.0 Copyright (c) 1996-2014 Texas Instruments Incorporated")
 	.dwattr $C$DW$CU, DW_AT_TI_version(0x01)
-	.dwattr $C$DW$CU, DW_AT_comp_dir("C:\davidc\Adaptive_filter_all\Release1")
+	.dwattr $C$DW$CU, DW_AT_comp_dir("C:\DSP_Systems\Adaptive_filter_all\Release1")
 
 $C$DW$1	.dwtag  DW_TAG_subprogram, DW_AT_name("_mpy")
 	.dwattr $C$DW$1, DW_AT_TI_symbol_name("_mpy")
@@ -138,7 +138,7 @@ $C$DW$9	.dwtag  DW_TAG_variable, DW_AT_name("Ela")
 	.dwattr $C$DW$9, DW_AT_decl_file("../LMSCLinear1.c")
 	.dwattr $C$DW$9, DW_AT_decl_line(0x09)
 	.dwattr $C$DW$9, DW_AT_decl_column(0x05)
-;	C:\ti\ccsv6\tools\compiler\ti-cgt-c6000_8.0.1\bin\opt6x.exe C:\\Users\\dr15755\\AppData\\Local\\Temp\\070522 C:\\Users\\dr15755\\AppData\\Local\\Temp\\070524 
+;	C:\DSP_Systems\bin\opt6x.exe C:\\Users\\pk0300\\AppData\\Local\\Temp\\046362 C:\\Users\\pk0300\\AppData\\Local\\Temp\\046364 
 	.sect	".text"
 	.clink
 	.global	LMS_C_Linear
@@ -188,7 +188,7 @@ $C$DW$12	.dwtag  DW_TAG_variable, DW_AT_name("BETA_Ela")
 $C$DW$13	.dwtag  DW_TAG_variable, DW_AT_name("newvalue")
 	.dwattr $C$DW$13, DW_AT_TI_symbol_name("newvalue")
 	.dwattr $C$DW$13, DW_AT_type(*$C$DW$T$21)
-	.dwattr $C$DW$13, DW_AT_location[DW_OP_reg4]
+	.dwattr $C$DW$13, DW_AT_location[DW_OP_reg3]
 	.dwcfi	cfa_offset, 0
 
            MVK     .S2     0x174,B8          ; [B_Sb66] |27| 

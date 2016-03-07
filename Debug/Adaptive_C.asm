@@ -1,6 +1,6 @@
 ;******************************************************************************
-;* G3 TMS320C6x C/C++ Codegen                                       PC v8.0.1 *
-;* Date/Time created: Wed Feb 24 21:09:27 2016                                *
+;* G3 TMS320C6x C/C++ Codegen                                       PC v8.0.0 *
+;* Date/Time created: Mon Mar 07 15:01:22 2016                                *
 ;******************************************************************************
 	.compiler_opts --abi=eabi --array_alignment=8 --c64p_l1d_workaround=off --diag_wrap=off --endian=little --hll_source=on --long_precision_bits=32 --mem_model:code=near --mem_model:const=data --mem_model:data=far_aggregates --object_format=elf --silicon_version=6600 --symdebug:dwarf --symdebug:dwarf_version=3 
 
@@ -8,13 +8,14 @@
 ;* GLOBAL FILE PARAMETERS                                                     *
 ;*                                                                            *
 ;*   Architecture      : TMS320C66xx                                          *
-;*   Optimization      : Disabled                                             *
-;*   Optimizing for    : Compile time, Ease of Development                    *
-;*                       Based on options: no -o, -ms3                        *
+;*   Optimization      : Enabled at level 2                                   *
+;*   Optimizing for    : Size                                                 *
+;*                       Based on options: -o2, -ms3                          *
 ;*   Endian            : Little                                               *
 ;*   Interrupt Thrshld : Disabled                                             *
 ;*   Data Access Model : Far Aggregate Data                                   *
-;*   Pipelining        : Disabled                                             *
+;*   Pipelining        : Enabled                                              *
+;*   Speculate Loads   : Enabled with threshold = 0                           *
 ;*   Memory Aliases    : Presume are aliases (pessimistic)                    *
 ;*   Debug Info        : DWARF Debug                                          *
 ;*                                                                            *
@@ -28,9 +29,9 @@
 
 $C$DW$CU	.dwtag  DW_TAG_compile_unit
 	.dwattr $C$DW$CU, DW_AT_name("../Adaptive_C.c")
-	.dwattr $C$DW$CU, DW_AT_producer("TI G3 TMS320C6x C/C++ Codegen PC v8.0.1 Copyright (c) 1996-2015 Texas Instruments Incorporated")
+	.dwattr $C$DW$CU, DW_AT_producer("TI G3 TMS320C6x C/C++ Codegen PC v8.0.0 Copyright (c) 1996-2014 Texas Instruments Incorporated")
 	.dwattr $C$DW$CU, DW_AT_TI_version(0x01)
-	.dwattr $C$DW$CU, DW_AT_comp_dir("C:\davidc\Adaptive_filter_all\Debug")
+	.dwattr $C$DW$CU, DW_AT_comp_dir("C:\DSP_Systems\Adaptive_filter_all\Debug")
 
 $C$DW$1	.dwtag  DW_TAG_subprogram, DW_AT_name("_nassert")
 	.dwattr $C$DW$1, DW_AT_TI_symbol_name("_nassert")
@@ -128,7 +129,7 @@ $C$DW$9	.dwtag  DW_TAG_variable, DW_AT_name("EC")
 	.dwattr $C$DW$9, DW_AT_decl_file("../Adaptive_C.c")
 	.dwattr $C$DW$9, DW_AT_decl_line(0x09)
 	.dwattr $C$DW$9, DW_AT_decl_column(0x05)
-;	C:\ti\ccsv6\tools\compiler\ti-cgt-c6000_8.0.1\bin\acpia6x.exe -@C:\\Users\\dr15755\\AppData\\Local\\Temp\\0321614 
+;	C:\DSP_Systems\bin\opt6x.exe C:\\Users\\pk0300\\AppData\\Local\\Temp\\165882 C:\\Users\\pk0300\\AppData\\Local\\Temp\\165884 
 	.sect	".text"
 	.clink
 	.global	LMS_isr_C
@@ -145,7 +146,7 @@ $C$DW$10	.dwtag  DW_TAG_subprogram, DW_AT_name("LMS_isr_C")
 	.dwattr $C$DW$10, DW_AT_decl_file("../Adaptive_C.c")
 	.dwattr $C$DW$10, DW_AT_decl_line(0x0e)
 	.dwattr $C$DW$10, DW_AT_decl_column(0x01)
-	.dwattr $C$DW$10, DW_AT_TI_max_frame_size(0x10)
+	.dwattr $C$DW$10, DW_AT_TI_max_frame_size(0x00)
 	.dwpsn	file "../Adaptive_C.c",line 15,column 1,is_stmt,address LMS_isr_C,isa 0
 
 	.dwfde $C$DW$CIE, LMS_isr_C
@@ -157,181 +158,171 @@ $C$DW$11	.dwtag  DW_TAG_formal_parameter, DW_AT_name("newvalue")
 ;******************************************************************************
 ;* FUNCTION NAME: LMS_isr_C                                                   *
 ;*                                                                            *
-;*   Regs Modified     : A0,A1,A2,A4,A5,B0,B1,B3,B4,B5,B6,B7,SP               *
-;*   Regs Used         : A0,A1,A2,A4,A5,B0,B1,B3,B4,B5,B6,B7,DP,SP            *
-;*   Local Frame Size  : 0 Args + 16 Auto + 0 Save = 16 byte                  *
+;*   Regs Modified     : A0,A1,A2,A3,A4,A5,A6,A7,A8,A9,A16,A17,A18,A19,A20,   *
+;*                           A21,B0,B1,B2,B3,B4,B5,B6,B7,B8,B9,B16            *
+;*   Regs Used         : A0,A1,A2,A3,A4,A5,A6,A7,A8,A9,A16,A17,A18,A19,A20,   *
+;*                           A21,B0,B1,B2,B3,B4,B5,B6,B7,B8,B9,DP,B16         *
+;*   Local Frame Size  : 0 Args + 0 Auto + 0 Save = 0 byte                    *
 ;******************************************************************************
 LMS_isr_C:
 ;** --------------------------------------------------------------------------*
-	.dwcfi	cfa_offset, 0
-
-           SUB     .D2     SP,16,SP          ; [B_D64P] |15| 
-||         MV      .L1X    B3,A2             ; [A_L66] |15| 
-
-	.dwcfi	cfa_offset, 16
-	.dwcfi	save_reg_to_reg, 19, 2
 $C$DW$12	.dwtag  DW_TAG_variable, DW_AT_name("newvalue")
 	.dwattr $C$DW$12, DW_AT_TI_symbol_name("newvalue")
-	.dwattr $C$DW$12, DW_AT_type(*$C$DW$T$8)
-	.dwattr $C$DW$12, DW_AT_location[DW_OP_breg31 4]
-$C$DW$13	.dwtag  DW_TAG_variable, DW_AT_name("i")
-	.dwattr $C$DW$13, DW_AT_TI_symbol_name("i")
-	.dwattr $C$DW$13, DW_AT_type(*$C$DW$T$10)
-	.dwattr $C$DW$13, DW_AT_location[DW_OP_breg31 8]
-$C$DW$14	.dwtag  DW_TAG_variable, DW_AT_name("temp_out")
-	.dwattr $C$DW$14, DW_AT_TI_symbol_name("temp_out")
-	.dwattr $C$DW$14, DW_AT_type(*$C$DW$T$8)
-	.dwattr $C$DW$14, DW_AT_location[DW_OP_breg31 12]
-$C$DW$15	.dwtag  DW_TAG_variable, DW_AT_name("BETA_E")
-	.dwattr $C$DW$15, DW_AT_TI_symbol_name("BETA_E")
-	.dwattr $C$DW$15, DW_AT_type(*$C$DW$T$8)
-	.dwattr $C$DW$15, DW_AT_location[DW_OP_breg31 14]
-$C$DW$16	.dwtag  DW_TAG_variable, DW_AT_name("D")
-	.dwattr $C$DW$16, DW_AT_TI_symbol_name("D")
-	.dwattr $C$DW$16, DW_AT_type(*$C$DW$T$8)
-	.dwattr $C$DW$16, DW_AT_location[DW_OP_breg31 16]
-           STH     .D2T1   A4,*SP(4)         ; [B_D64P] |15| 
-	.dwpsn	file "../Adaptive_C.c",line 17,column 2,is_stmt,isa 0
-	.dwpsn	file "../Adaptive_C.c",line 18,column 2,is_stmt,isa 0
-	.dwpsn	file "../Adaptive_C.c",line 23,column 2,is_stmt,isa 0
-           LDH     .D2T1   *SP(4),A0         ; [B_D64P] |23| 
-           MVKL    .S1     XC,A4             ; [A_S66] |23| 
-           MVKH    .S1     XC,A4             ; [A_S66] |23| 
-           NOP             2                 ; [A_L66] 
-           STH     .D1T1   A0,*A4(0)         ; [A_D64P] |23| 
-	.dwpsn	file "../Adaptive_C.c",line 24,column 2,is_stmt,isa 0
-           LDH     .D1T2   *A4(0),B0         ; [A_D64P] |24| 
-           NOP             4                 ; [A_L66] 
-           STH     .D2T2   B0,*SP(16)        ; [B_D64P] |24| 
-	.dwpsn	file "../Adaptive_C.c",line 25,column 2,is_stmt,isa 0
-           ZERO    .L2     B0                ; [B_L66] |25| 
-           STW     .D2T2   B0,*+DP(YC)       ; [B_D64P] |25| 
-	.dwpsn	file "../Adaptive_C.c",line 29,column 6,is_stmt,isa 0
-           MV      .L1X    B0,A0             ; [A_L66] 
-           STW     .D2T1   A0,*SP(8)         ; [B_D64P] |29| 
-	.dwpsn	file "../Adaptive_C.c",line 29,column 10,is_stmt,isa 0
-           CMPLT   .L2     B0,8,B0           ; [B_L66] |29| 
-   [!B0]   BNOP            $C$L2,5           ; [] |29| 
-           ; BRANCHCC OCCURS {$C$L2}         ; [] |29| 
-;** --------------------------------------------------------------------------*
-           MVKL    .S2     hC,B5             ; [B_Sb66] |31| 
-
-           MVKH    .S2     hC,B5             ; [B_Sb66] |31| 
-||         MV      .L1     A4,A5             ; [A_L66] 
-
-;** --------------------------------------------------------------------------*
-;**   BEGIN LOOP $C$L1
-;** --------------------------------------------------------------------------*
-$C$L1:    
-	.dwpsn	file "../Adaptive_C.c",line 31,column 3,is_stmt,isa 0
-           LDW     .D2T1   *SP(8),A4         ; [B_D64P] |31| 
-           LDW     .D2T1   *+DP(YC),A1       ; [B_D64P] |31| 
-           NOP             3                 ; [A_L66] 
-           MV      .L2X    A4,B4             ; [B_L66] |31| 
-
-           LDH     .D2T2   *+B5[B4],B0       ; [B_D64P] |31| 
-||         LDH     .D1T1   *+A5[A4],A0       ; [A_D64P] |31| 
-
-           NOP             4                 ; [A_L66] 
-           MPY     .M1X    B0,A0,A0          ; [A_M66] |31| 
-           NOP             1                 ; [A_L66] 
-           ADDAH   .D1     A1,A0,A0          ; [A_D64P] |31| 
-           STW     .D2T1   A0,*+DP(YC)       ; [B_D64P] |31| 
-	.dwpsn	file "../Adaptive_C.c",line 29,column 14,is_stmt,isa 0
-           ADD     .L2     1,B4,B0           ; [B_L66] |29| 
-           STW     .D2T2   B0,*SP(8)         ; [B_D64P] |29| 
-	.dwpsn	file "../Adaptive_C.c",line 29,column 10,is_stmt,isa 0
-           CMPLT   .L2     B0,8,B0           ; [B_L66] |29| 
-   [ B0]   BNOP            $C$L1,5           ; [] |29| 
-           ; BRANCHCC OCCURS {$C$L1}         ; [] |29| 
-;** --------------------------------------------------------------------------*
-$C$L2:    
-	.dwpsn	file "../Adaptive_C.c",line 34,column 2,is_stmt,isa 0
-           LDH     .D2T2   *+DP(YC+2),B1     ; [B_D64P] |34| 
-           LDH     .D2T2   *SP(16),B0        ; [B_D64P] |34| 
-           NOP             4                 ; [A_L66] 
-           SUB     .L2     B0,B1,B0          ; [B_L66] |34| 
-           STW     .D2T2   B0,*+DP(EC)       ; [B_D64P] |34| 
-	.dwpsn	file "../Adaptive_C.c",line 35,column 2,is_stmt,isa 0
-
-           MV      .L2     B0,B1             ; [B_L66] 
-||         MVK     .S2     116,B0            ; [B_Sb66] |35| 
-
-           SET     .S2     B0,8,8,B0         ; [B_Sb66] |35| 
-           MPY     .M2     B0,B1,B0          ; [B_M66] |35| 
-           NOP             1                 ; [A_L66] 
-           SHR     .S2     B0,15,B0          ; [B_Sb66] |35| 
-           STH     .D2T2   B0,*SP(14)        ; [B_D64P] |35| 
-	.dwpsn	file "../Adaptive_C.c",line 39,column 6,is_stmt,isa 0
-           MVK     .L2     7,B0              ; [B_L66] |39| 
-           STW     .D2T2   B0,*SP(8)         ; [B_D64P] |39| 
-	.dwpsn	file "../Adaptive_C.c",line 39,column 12,is_stmt,isa 0
-           CMPGT   .L2     B0,0,B0           ; [B_L66] |39| 
-   [!B0]   BNOP            $C$L4,5           ; [] |39| 
-           ; BRANCHCC OCCURS {$C$L4}         ; [] |39| 
-;** --------------------------------------------------------------------------*
-           MVKL    .S1     hC,A5             ; [A_S66] |43| 
-
-           MVKH    .S1     hC,A5             ; [A_S66] |43| 
-||         MVKL    .S2     XC,B6             ; [B_Sb66] |43| 
-
-           MVKH    .S2     XC,B6             ; [B_Sb66] |43| 
-
-           MV      .L2X    A5,B5             ; [B_L66] |43| 
-||         MV      .S2     B6,B7             ; [B_Sb66] |43| 
-||         MV      .D2     B6,B3             ; [B_D64P] |43| 
-
-;** --------------------------------------------------------------------------*
-;**   BEGIN LOOP $C$L3
-;** --------------------------------------------------------------------------*
-$C$L3:    
-	.dwpsn	file "../Adaptive_C.c",line 43,column 3,is_stmt,isa 0
-           LDW     .D2T2   *SP(8),B1         ; [B_D64P] |43| 
-           LDH     .D2T2   *SP(14),B0        ; [B_D64P] |43| 
-           NOP             3                 ; [A_L66] 
-
-           MV      .L1X    B1,A4             ; [A_L66] |43| 
-||         LDH     .D2T2   *+B6[B1],B1       ; [B_D64P] |43| 
-
-           LDH     .D1T1   *+A5[A4],A0       ; [A_D64P] |43| 
-           NOP             3                 ; [A_L66] 
-           MPY     .M2     B0,B1,B0          ; [B_M66] |43| 
-           MV      .L2X    A4,B1             ; [B_L66] |43| 
-           SHR     .S2     B0,15,B0          ; [B_Sb66] |43| 
-           NOP             1                 ; [A_L66] 
-           ADD     .L1X    B0,A0,A0          ; [A_L66] |43| 
-           STH     .D2T1   A0,*+B5[B1]       ; [B_D64P] |43| 
-	.dwpsn	file "../Adaptive_C.c",line 44,column 3,is_stmt,isa 0
-           ADD     .L2     B1,B1,B0          ; [B_L66] |44| 
-           SUB     .L2     B0,2,B0           ; [B_L66] |44| 
-           ADD     .L2     B3,B0,B4          ; [B_L66] |44| 
-           LDH     .D2T2   *B4(0),B0         ; [B_D64P] |44| 
-           NOP             4                 ; [A_L66] 
-           STH     .D2T2   B0,*+B7[B1]       ; [B_D64P] |44| 
-	.dwpsn	file "../Adaptive_C.c",line 39,column 16,is_stmt,isa 0
-           SUB     .L2     B1,1,B0           ; [B_L66] |39| 
-           STW     .D2T2   B0,*SP(8)         ; [B_D64P] |39| 
-	.dwpsn	file "../Adaptive_C.c",line 39,column 12,is_stmt,isa 0
-           CMPGT   .L2     B0,0,B1           ; [B_L66] |39| 
-   [ B1]   BNOP            $C$L3,5           ; [] |39| 
-           ; BRANCHCC OCCURS {$C$L3}         ; [] |39| 
-;** --------------------------------------------------------------------------*
-$C$L4:    
-	.dwpsn	file "../Adaptive_C.c",line 47,column 2,is_stmt,isa 0
-           LDH     .D2T2   *+DP(YC+2),B0     ; [B_D64P] |47| 
-           NOP             4                 ; [A_L66] 
-           STH     .D2T2   B0,*SP(12)        ; [B_D64P] |47| 
-	.dwpsn	file "../Adaptive_C.c",line 49,column 2,is_stmt,isa 0
-           LDH     .D2T1   *SP(12),A4        ; [B_D64P] |49| 
-           NOP             4                 ; [A_L66] 
-	.dwpsn	file "../Adaptive_C.c",line 51,column 1,is_stmt,isa 0
-$C$DW$17	.dwtag  DW_TAG_TI_branch
-	.dwattr $C$DW$17, DW_AT_low_pc(0x00)
-	.dwattr $C$DW$17, DW_AT_TI_return
-           RETNOP          A2,4              ; [] |51| 
-           ADDAW   .D2     SP,4,SP           ; [B_D64P] |51| 
+	.dwattr $C$DW$12, DW_AT_type(*$C$DW$T$22)
+	.dwattr $C$DW$12, DW_AT_location[DW_OP_reg3]
 	.dwcfi	cfa_offset, 0
-           ; BRANCH OCCURS {A2}              ; [] |51| 
+	.dwpsn	file "../Adaptive_C.c",line 23,column 2,is_stmt,isa 0
+           MVKL    .S2     XC,B4             ; [B_Sb66] |23| 
+
+           MVKH    .S2     XC,B4             ; [B_Sb66] |23| 
+||         MVKL    .S1     hC,A5             ; [A_S66] |31| 
+
+           MV      .L2     B4,B5             ; [B_L66] |23| 
+||         MVKH    .S1     hC,A5             ; [A_S66] |31| 
+
+	.dwpsn	file "../Adaptive_C.c",line 15,column 1,is_stmt,isa 0
+
+           LDDW    .D1T1   *A5(8),A7:A6      ; [A_D64P] |31| 
+||         MV      .L1X    B3,A21            ; [A_L66] |15| 
+||         LDDW    .D2T2   *B5(8),B3:B2      ; [B_D64P] |31| 
+||         MV      .S1     A4,A1             ; [A_S66] |15| 
+
+	.dwcfi	save_reg_to_reg, 19, 44
+	.dwpsn	file "../Adaptive_C.c",line 23,column 2,is_stmt,isa 0
+           STH     .D2T1   A1,*B5(0)         ; [B_D64P] |23| 
+	.dwpsn	file "../Adaptive_C.c",line 31,column 3,is_stmt,isa 0
+
+           LDDW    .D2T2   *B5(0),B1:B0      ; [B_D64P] |31| 
+||         LDDW    .D1T1   *A5(0),A9:A8      ; [A_D64P] |31| 
+
+	.dwpsn	file "../Adaptive_C.c",line 15,column 1,is_stmt,isa 0
+           MV      .L1     A4,A2             ; [A_L66] |15| 
+           MVK     .S1     14,A4             ; [A_S66] 
+           DOTP2   .M2X    A7,B3,B7          ; [B_M66] 
+           DOTP2   .M1X    A6,B2,A7          ; [A_M66] 
+
+           DOTP2   .M1X    A9,B1,A6          ; [A_M66] 
+||         DOTP2   .M2X    A8,B0,B6          ; [B_M66] 
+
+	.dwpsn	file "../Adaptive_C.c",line 44,column 3,is_stmt,isa 0
+           LDH     .D2T2   *B5(6),B16        ; [B_D64P] |44| 
+           LDH     .D2T2   *B5(4),B3         ; [B_D64P] |44| 
+           ADD     .L1X    A7,B7,A0          ; [A_L66] 
+           ADD     .L1     A6,A0,A0          ; [A_L66] 
+           ADD     .L1X    B6,A0,A0          ; [A_L66] 
+           ADD     .L1     A0,A0,A3          ; [A_L66] 
+	.dwpsn	file "../Adaptive_C.c",line 34,column 2,is_stmt,isa 0
+
+           LDH     .D1T1   *A5(4),A20        ; [A_D64P] |43| 
+||         SHR     .S1     A3,16,A0          ; [A_S66] |34| 
+
+           SUB     .L1     A2,A0,A19         ; [A_L66] |34| 
+||         MVK     .S1     116,A0            ; [A_S66] |43| 
+||         LDH     .D2T2   *B5(2),B7         ; [B_D64P] |44| 
+||         LDH     .D1T1   *A5(10),A17       ; [A_D64P] |43| 
+
+	.dwpsn	file "../Adaptive_C.c",line 43,column 3,is_stmt,isa 0
+
+           ADD     .L1X    A4,B5,A4          ; [A_L66] 
+||         SET     .S1     A0,8,8,A0         ; [A_S66] |43| 
+||         LDH     .D2T2   *B5(12),B1        ; [B_D64P] |44| 
+||         MVK     .S2     14,B4             ; [B_Sb66] 
+||         LDH     .D1T1   *A5(14),A18       ; [A_D64P] |43| 
+
+           LDH     .D2T1   *B5(14),A7        ; [B_D64P] |43| 
+||         ADD     .L1     -6,A4,A6          ; [A_L66] 
+||         MPY     .M1     A19,A0,A0         ; [A_M66] |43| 
+||         MVK     .L2     -12,B6            ; [B_L66] 
+||         ADD     .S2X    B4,A5,B4          ; [B_Sb66] 
+
+	.dwpsn	file "../Adaptive_C.c",line 44,column 3,is_stmt,isa 0
+
+           LDH     .D2T1   *B5(10),A2        ; [B_D64P] |44| 
+||         LDH     .D1T2   *A6(0),B2         ; [A_D64P] |44| 
+||         ADD     .L2X    B6,A4,B6          ; [B_L66] 
+
+	.dwpsn	file "../Adaptive_C.c",line 43,column 3,is_stmt,isa 0
+
+           ADD     .L2     -6,B4,B5          ; [B_L66] 
+||         STH     .D2T1   A1,*B6(0)         ; [B_D64P] |44| 
+||         SHR     .S1     A0,15,A1          ; [A_S66] |43| 
+||         LDH     .D1T2   *A5(12),B9        ; [A_D64P] |43| 
+
+           LDH     .D2T2   *B5(0),B8         ; [B_D64P] |43| 
+||         ADD     .L2X    -8,A4,B5          ; [B_L66] 
+||         LDH     .D1T1   *A5(6),A8         ; [A_D64P] |43| 
+
+           MPY     .M2X    A1,B1,B0          ; [B_M66] |43| 
+||         STH     .D1T2   B1,*A4(0)         ; [A_D64P] |44| 
+
+           MPY     .M1     A1,A7,A0          ; [A_M66] |43| 
+||         LDH     .D1T1   *A5(2),A6         ; [A_D64P] |43| 
+||         ADD     .S1     -2,A4,A5          ; [A_S66] 
+||         STH     .D2T2   B3,*B5(0)         ; [B_D64P] |44| 
+||         ADD     .L2X    -4,A4,B5          ; [B_L66] 
+||         ADD     .L1X    -6,B4,A16         ; [A_L66] 
+
+           STH     .D1T1   A2,*A5(0)         ; [A_D64P] |44| 
+||         MPY     .M1     A1,A2,A2          ; [A_M66] |43| 
+||         STH     .D2T2   B2,*B5(0)         ; [B_D64P] |44| 
+||         MPY     .M2X    A1,B2,B2          ; [B_M66] |43| 
+||         SHR     .S2     B0,15,B1          ; [B_Sb66] |43| 
+||         ADD     .S1     -6,A4,A9          ; [A_S66] 
+||         ADD     .L1X    -2,B4,A5          ; [A_L66] 
+
+$C$DW$13	.dwtag  DW_TAG_TI_branch
+	.dwattr $C$DW$13, DW_AT_low_pc(0x08)
+	.dwattr $C$DW$13, DW_AT_TI_return
+
+           SHR     .S1     A0,15,A7          ; [A_S66] |43| 
+||         MPY     .M1X    A1,B16,A0         ; [A_M66] |43| 
+||         RET     .S2     A21               ; [B_Sb66] |51| 
+||         ADD     .L1     -10,A4,A4         ; [A_L66] 
+||         STW     .D2T1   A3,*+DP(YC)       ; [B_D64P] 
+||         STH     .D1T2   B16,*A9(0)        ; [A_D64P] |44| 
+
+	.dwpsn	file "../Adaptive_C.c",line 34,column 2,is_stmt,isa 0
+
+           MPY     .M2X    A1,B3,B0          ; [B_M66] |43| 
+||         SHR     .S1     A2,15,A1          ; [A_S66] |43| 
+||         MPY     .M1X    A1,B7,A2          ; [A_M66] |43| 
+||         ADD     .L2     B1,B9,B1          ; [B_L66] |43| 
+||         STH     .D1T2   B7,*A4(0)         ; [A_D64P] |44| 
+||         ADD     .L1     A7,A18,A4         ; [A_L66] |43| 
+||         ADD     .S2     -4,B4,B6          ; [B_Sb66] 
+||         STW     .D2T1   A19,*+DP(EC)      ; [B_D64P] |34| 
+
+	.dwpsn	file "../Adaptive_C.c",line 43,column 3,is_stmt,isa 0
+
+           ADD     .L1     A1,A17,A1         ; [A_L66] |43| 
+||         SHR     .S1     A0,15,A0          ; [A_S66] |43| 
+||         SHR     .S2     B2,15,B3          ; [B_Sb66] |43| 
+||         STH     .D1T2   B1,*A5(0)         ; [A_D64P] |43| 
+||         STH     .D2T1   A4,*B4(0)         ; [B_D64P] |43| 
+||         ADD     .L2     -8,B4,B5          ; [B_L66] 
+
+           STH     .D2T1   A1,*B6(0)         ; [B_D64P] |43| 
+||         SHR     .S2     B0,15,B1          ; [B_Sb66] |43| 
+||         ADD     .L2     B3,B8,B0          ; [B_L66] |43| 
+||         ADD     .L1     A0,A8,A1          ; [A_L66] |43| 
+||         SHR     .S1     A2,15,A0          ; [A_S66] |43| 
+||         MVK     .D1     -10,A4            ; [A_D64P] 
+
+           STH     .D1T2   B0,*A16(0)        ; [A_D64P] |43| 
+||         ADD     .L1     A0,A6,A0          ; [A_L66] |43| 
+||         ADD     .L2X    B1,A20,B0         ; [B_L66] |43| 
+||         ADD     .S1X    A4,B4,A4          ; [A_S66] 
+||         ADD     .S2     -12,B4,B4         ; [B_Sb66] 
+||         STH     .D2T1   A1,*B5(0)         ; [B_D64P] |43| 
+
+	.dwpsn	file "../Adaptive_C.c",line 34,column 2,is_stmt,isa 0
+
+           STH     .D1T2   B0,*A4(0)         ; [A_D64P] |43| 
+||         STH     .D2T1   A0,*B4(0)         ; [B_D64P] |43| 
+||         SHR     .S1     A3,16,A4          ; [A_S66] |34| 
+
+	.dwpsn	file "../Adaptive_C.c",line 51,column 1,is_stmt,isa 0
+           ; BRANCH OCCURS {A21}             ; [] |51| 
 	.dwattr $C$DW$10, DW_AT_TI_end_file("../Adaptive_C.c")
 	.dwattr $C$DW$10, DW_AT_TI_end_line(0x33)
 	.dwattr $C$DW$10, DW_AT_TI_end_column(0x01)
@@ -385,10 +376,12 @@ $C$DW$T$20	.dwtag  DW_TAG_array_type
 	.dwattr $C$DW$T$20, DW_AT_type(*$C$DW$T$8)
 	.dwattr $C$DW$T$20, DW_AT_language(DW_LANG_C)
 	.dwattr $C$DW$T$20, DW_AT_byte_size(0x10)
-$C$DW$18	.dwtag  DW_TAG_subrange_type
-	.dwattr $C$DW$18, DW_AT_upper_bound(0x07)
+$C$DW$14	.dwtag  DW_TAG_subrange_type
+	.dwattr $C$DW$14, DW_AT_upper_bound(0x07)
 	.dwendtag $C$DW$T$20
 
+$C$DW$T$22	.dwtag  DW_TAG_const_type
+	.dwattr $C$DW$T$22, DW_AT_type(*$C$DW$T$8)
 $C$DW$T$9	.dwtag  DW_TAG_base_type
 	.dwattr $C$DW$T$9, DW_AT_encoding(DW_ATE_unsigned)
 	.dwattr $C$DW$T$9, DW_AT_name("unsigned short")
@@ -433,15 +426,15 @@ $C$DW$T$18	.dwtag  DW_TAG_base_type
 	.dwattr $C$DW$T$18, DW_AT_encoding(DW_ATE_float)
 	.dwattr $C$DW$T$18, DW_AT_name("long double")
 	.dwattr $C$DW$T$18, DW_AT_byte_size(0x08)
-$C$DW$T$26	.dwtag  DW_TAG_pointer_type
-	.dwattr $C$DW$T$26, DW_AT_type(*$C$DW$T$5)
-	.dwattr $C$DW$T$26, DW_AT_address_class(0x20)
-$C$DW$T$27	.dwtag  DW_TAG_typedef, DW_AT_name("__builtin_va_list")
-	.dwattr $C$DW$T$27, DW_AT_type(*$C$DW$T$26)
-	.dwattr $C$DW$T$27, DW_AT_language(DW_LANG_C)
-	.dwattr $C$DW$T$27, DW_AT_decl_file("../Adaptive_C.c")
-	.dwattr $C$DW$T$27, DW_AT_decl_line(0x33)
-	.dwattr $C$DW$T$27, DW_AT_decl_column(0x01)
+$C$DW$T$29	.dwtag  DW_TAG_pointer_type
+	.dwattr $C$DW$T$29, DW_AT_type(*$C$DW$T$5)
+	.dwattr $C$DW$T$29, DW_AT_address_class(0x20)
+$C$DW$T$30	.dwtag  DW_TAG_typedef, DW_AT_name("__builtin_va_list")
+	.dwattr $C$DW$T$30, DW_AT_type(*$C$DW$T$29)
+	.dwattr $C$DW$T$30, DW_AT_language(DW_LANG_C)
+	.dwattr $C$DW$T$30, DW_AT_decl_file("../Adaptive_C.c")
+	.dwattr $C$DW$T$30, DW_AT_decl_line(0x33)
+	.dwattr $C$DW$T$30, DW_AT_decl_column(0x01)
 	.dwattr $C$DW$CU, DW_AT_language(DW_LANG_C)
 
 ;***************************************************************

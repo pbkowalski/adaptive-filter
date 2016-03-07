@@ -1,6 +1,6 @@
 ;******************************************************************************
-;* G3 TMS320C6x C/C++ Codegen                                       PC v8.0.1 *
-;* Date/Time created: Mon Mar 07 11:12:58 2016                                *
+;* G3 TMS320C6x C/C++ Codegen                                       PC v8.0.0 *
+;* Date/Time created: Mon Mar 07 14:54:40 2016                                *
 ;******************************************************************************
 	.compiler_opts --abi=eabi --array_alignment=8 --c64p_l1d_workaround=off --diag_wrap=off --endian=little --hll_source=linasm --long_precision_bits=32 --mem_model:code=near --mem_model:const=data --mem_model:data=far_aggregates --object_format=elf --silicon_version=6600 --symdebug:dwarf --symdebug:dwarf_version=3 
 
@@ -28,9 +28,9 @@
 
 $C$DW$CU	.dwtag  DW_TAG_compile_unit
 	.dwattr $C$DW$CU, DW_AT_name("../adaptativelinear2.sa")
-	.dwattr $C$DW$CU, DW_AT_producer("TI G3 TMS320C6x C/C++ Codegen PC v8.0.1 Copyright (c) 1996-2015 Texas Instruments Incorporated")
+	.dwattr $C$DW$CU, DW_AT_producer("TI G3 TMS320C6x C/C++ Codegen PC v8.0.0 Copyright (c) 1996-2014 Texas Instruments Incorporated")
 	.dwattr $C$DW$CU, DW_AT_TI_version(0x01)
-	.dwattr $C$DW$CU, DW_AT_comp_dir("C:\davidc\Adaptive_filter_all\Release1")
+	.dwattr $C$DW$CU, DW_AT_comp_dir("C:\DSP_Systems\Adaptive_filter_all\Release1")
 ;
 	.sect	".text"
 	.global	LinearAssembly4
@@ -79,47 +79,75 @@ LinearAssembly4:
 $C$DW$2	.dwtag  DW_TAG_variable, DW_AT_name("prod1")
 	.dwattr $C$DW$2, DW_AT_TI_symbol_name("prod1")
 	.dwattr $C$DW$2, DW_AT_type(*$C$DW$T$10)
-	.dwattr $C$DW$2, DW_AT_location[DW_OP_reg7]
+	.dwattr $C$DW$2, DW_AT_location[DW_OP_reg3]
 $C$DW$3	.dwtag  DW_TAG_variable, DW_AT_name("prod2")
 	.dwattr $C$DW$3, DW_AT_TI_symbol_name("prod2")
 	.dwattr $C$DW$3, DW_AT_type(*$C$DW$T$10)
-	.dwattr $C$DW$3, DW_AT_location[DW_OP_reg6]
-$C$DW$4	.dwtag  DW_TAG_variable, DW_AT_name("xla")
-	.dwattr $C$DW$4, DW_AT_TI_symbol_name("xla")
+	.dwattr $C$DW$3, DW_AT_location[DW_OP_reg3]
+$C$DW$4	.dwtag  DW_TAG_variable, DW_AT_name("h1")
+	.dwattr $C$DW$4, DW_AT_TI_symbol_name("h1")
 	.dwattr $C$DW$4, DW_AT_type(*$C$DW$T$10)
-	.dwattr $C$DW$4, DW_AT_location[DW_OP_reg8]
-$C$DW$5	.dwtag  DW_TAG_variable, DW_AT_name("xla")
-	.dwattr $C$DW$5, DW_AT_TI_symbol_name("xla")
+	.dwattr $C$DW$4, DW_AT_location[DW_OP_reg3]
+$C$DW$5	.dwtag  DW_TAG_variable, DW_AT_name("h2")
+	.dwattr $C$DW$5, DW_AT_TI_symbol_name("h2")
 	.dwattr $C$DW$5, DW_AT_type(*$C$DW$T$10)
-	.dwattr $C$DW$5, DW_AT_location[DW_OP_reg20]
-$C$DW$6	.dwtag  DW_TAG_variable, DW_AT_name("index")
-	.dwattr $C$DW$6, DW_AT_TI_symbol_name("index")
+	.dwattr $C$DW$5, DW_AT_location[DW_OP_reg3]
+$C$DW$6	.dwtag  DW_TAG_variable, DW_AT_name("xla")
+	.dwattr $C$DW$6, DW_AT_TI_symbol_name("xla")
 	.dwattr $C$DW$6, DW_AT_type(*$C$DW$T$10)
-	.dwattr $C$DW$6, DW_AT_location[DW_OP_reg16]
-$C$DW$7	.dwtag  DW_TAG_variable, DW_AT_name("sum1")
-	.dwattr $C$DW$7, DW_AT_TI_symbol_name("sum1")
+	.dwattr $C$DW$6, DW_AT_location[DW_OP_reg8]
+$C$DW$7	.dwtag  DW_TAG_variable, DW_AT_name("xla")
+	.dwattr $C$DW$7, DW_AT_TI_symbol_name("xla")
 	.dwattr $C$DW$7, DW_AT_type(*$C$DW$T$10)
-	.dwattr $C$DW$7, DW_AT_location[DW_OP_reg5]
-$C$DW$8	.dwtag  DW_TAG_variable, DW_AT_name("sum2")
-	.dwattr $C$DW$8, DW_AT_TI_symbol_name("sum2")
+	.dwattr $C$DW$7, DW_AT_location[DW_OP_reg20]
+$C$DW$8	.dwtag  DW_TAG_variable, DW_AT_name("hla")
+	.dwattr $C$DW$8, DW_AT_TI_symbol_name("hla")
 	.dwattr $C$DW$8, DW_AT_type(*$C$DW$T$10)
 	.dwattr $C$DW$8, DW_AT_location[DW_OP_reg3]
-$C$DW$9	.dwtag  DW_TAG_variable, DW_AT_name("beta")
-	.dwattr $C$DW$9, DW_AT_TI_symbol_name("beta")
+$C$DW$9	.dwtag  DW_TAG_variable, DW_AT_name("hla")
+	.dwattr $C$DW$9, DW_AT_TI_symbol_name("hla")
 	.dwattr $C$DW$9, DW_AT_type(*$C$DW$T$10)
-	.dwattr $C$DW$9, DW_AT_location[DW_OP_reg4]
-$C$DW$10	.dwtag  DW_TAG_variable, DW_AT_name("x1")
-	.dwattr $C$DW$10, DW_AT_TI_symbol_name("x1")
+	.dwattr $C$DW$9, DW_AT_location[DW_OP_reg6]
+$C$DW$10	.dwtag  DW_TAG_variable, DW_AT_name("index")
+	.dwattr $C$DW$10, DW_AT_TI_symbol_name("index")
 	.dwattr $C$DW$10, DW_AT_type(*$C$DW$T$10)
-	.dwattr $C$DW$10, DW_AT_location[DW_OP_reg7]
-$C$DW$11	.dwtag  DW_TAG_variable, DW_AT_name("x2")
-	.dwattr $C$DW$11, DW_AT_TI_symbol_name("x2")
+	.dwattr $C$DW$10, DW_AT_location[DW_OP_reg16]
+$C$DW$11	.dwtag  DW_TAG_variable, DW_AT_name("sum1")
+	.dwattr $C$DW$11, DW_AT_TI_symbol_name("sum1")
 	.dwattr $C$DW$11, DW_AT_type(*$C$DW$T$10)
-	.dwattr $C$DW$11, DW_AT_location[DW_OP_reg6]
-$C$DW$12	.dwtag  DW_TAG_variable, DW_AT_name("nla")
-	.dwattr $C$DW$12, DW_AT_TI_symbol_name("nla")
+	.dwattr $C$DW$11, DW_AT_location[DW_OP_reg5]
+$C$DW$12	.dwtag  DW_TAG_variable, DW_AT_name("sum1")
+	.dwattr $C$DW$12, DW_AT_TI_symbol_name("sum1")
 	.dwattr $C$DW$12, DW_AT_type(*$C$DW$T$10)
-	.dwattr $C$DW$12, DW_AT_location[DW_OP_reg22]
+	.dwattr $C$DW$12, DW_AT_location[DW_OP_reg4]
+$C$DW$13	.dwtag  DW_TAG_variable, DW_AT_name("sum2")
+	.dwattr $C$DW$13, DW_AT_TI_symbol_name("sum2")
+	.dwattr $C$DW$13, DW_AT_type(*$C$DW$T$10)
+	.dwattr $C$DW$13, DW_AT_location[DW_OP_reg3]
+$C$DW$14	.dwtag  DW_TAG_variable, DW_AT_name("beta")
+	.dwattr $C$DW$14, DW_AT_TI_symbol_name("beta")
+	.dwattr $C$DW$14, DW_AT_type(*$C$DW$T$10)
+	.dwattr $C$DW$14, DW_AT_location[DW_OP_reg4]
+$C$DW$15	.dwtag  DW_TAG_variable, DW_AT_name("beta")
+	.dwattr $C$DW$15, DW_AT_TI_symbol_name("beta")
+	.dwattr $C$DW$15, DW_AT_type(*$C$DW$T$10)
+	.dwattr $C$DW$15, DW_AT_location[DW_OP_reg4]
+$C$DW$16	.dwtag  DW_TAG_variable, DW_AT_name("x1")
+	.dwattr $C$DW$16, DW_AT_TI_symbol_name("x1")
+	.dwattr $C$DW$16, DW_AT_type(*$C$DW$T$10)
+	.dwattr $C$DW$16, DW_AT_location[DW_OP_reg4]
+$C$DW$17	.dwtag  DW_TAG_variable, DW_AT_name("x2")
+	.dwattr $C$DW$17, DW_AT_TI_symbol_name("x2")
+	.dwattr $C$DW$17, DW_AT_type(*$C$DW$T$10)
+	.dwattr $C$DW$17, DW_AT_location[DW_OP_reg3]
+$C$DW$18	.dwtag  DW_TAG_variable, DW_AT_name("nla")
+	.dwattr $C$DW$18, DW_AT_TI_symbol_name("nla")
+	.dwattr $C$DW$18, DW_AT_type(*$C$DW$T$10)
+	.dwattr $C$DW$18, DW_AT_location[DW_OP_reg3]
+$C$DW$19	.dwtag  DW_TAG_variable, DW_AT_name("nla")
+	.dwattr $C$DW$19, DW_AT_TI_symbol_name("nla")
+	.dwattr $C$DW$19, DW_AT_type(*$C$DW$T$10)
+	.dwattr $C$DW$19, DW_AT_location[DW_OP_reg22]
 	.dwcfi	cfa_offset, 0
 ;
 ;
@@ -147,9 +175,9 @@ $C$L1:
 ||         DOTP2   .M1     x2,beta,prod2     ; [A_M66] |18| 
 
 	.dwpsn	file "../adaptativelinear2.sa",line 17,column 1,is_stmt,isa 0
-$C$DW$13	.dwtag  DW_TAG_TI_branch
-	.dwattr $C$DW$13, DW_AT_low_pc(0x00)
-	.dwattr $C$DW$13, DW_AT_TI_return
+$C$DW$20	.dwtag  DW_TAG_TI_branch
+	.dwattr $C$DW$20, DW_AT_low_pc(0x00)
+	.dwattr $C$DW$20, DW_AT_TI_return
 
    [!index] RET    .S2     B3                ; [B_Sb66] |30| 
 ||         ADD     .L1     sum1,prod1,sum1   ; [A_L66] |17| 

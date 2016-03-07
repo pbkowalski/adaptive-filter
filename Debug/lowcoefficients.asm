@@ -1,6 +1,6 @@
 ;******************************************************************************
-;* G3 TMS320C6x C/C++ Codegen                                       PC v8.0.1 *
-;* Date/Time created: Wed Feb 24 21:09:27 2016                                *
+;* G3 TMS320C6x C/C++ Codegen                                       PC v8.0.0 *
+;* Date/Time created: Mon Mar 07 15:01:24 2016                                *
 ;******************************************************************************
 	.compiler_opts --abi=eabi --array_alignment=8 --c64p_l1d_workaround=off --diag_wrap=off --endian=little --hll_source=on --long_precision_bits=32 --mem_model:code=near --mem_model:const=data --mem_model:data=far_aggregates --object_format=elf --silicon_version=6600 --symdebug:dwarf --symdebug:dwarf_version=3 
 
@@ -8,13 +8,14 @@
 ;* GLOBAL FILE PARAMETERS                                                     *
 ;*                                                                            *
 ;*   Architecture      : TMS320C66xx                                          *
-;*   Optimization      : Disabled                                             *
-;*   Optimizing for    : Compile time, Ease of Development                    *
-;*                       Based on options: no -o, -ms3                        *
+;*   Optimization      : Enabled at level 2                                   *
+;*   Optimizing for    : Size                                                 *
+;*                       Based on options: -o2, -ms3                          *
 ;*   Endian            : Little                                               *
 ;*   Interrupt Thrshld : Disabled                                             *
 ;*   Data Access Model : Far Aggregate Data                                   *
-;*   Pipelining        : Disabled                                             *
+;*   Pipelining        : Enabled                                              *
+;*   Speculate Loads   : Enabled with threshold = 0                           *
 ;*   Memory Aliases    : Presume are aliases (pessimistic)                    *
 ;*   Debug Info        : DWARF Debug                                          *
 ;*                                                                            *
@@ -28,9 +29,9 @@
 
 $C$DW$CU	.dwtag  DW_TAG_compile_unit
 	.dwattr $C$DW$CU, DW_AT_name("../lowcoefficients.c")
-	.dwattr $C$DW$CU, DW_AT_producer("TI G3 TMS320C6x C/C++ Codegen PC v8.0.1 Copyright (c) 1996-2015 Texas Instruments Incorporated")
+	.dwattr $C$DW$CU, DW_AT_producer("TI G3 TMS320C6x C/C++ Codegen PC v8.0.0 Copyright (c) 1996-2014 Texas Instruments Incorporated")
 	.dwattr $C$DW$CU, DW_AT_TI_version(0x01)
-	.dwattr $C$DW$CU, DW_AT_comp_dir("C:\davidc\Adaptive_filter_all\Debug")
+	.dwattr $C$DW$CU, DW_AT_comp_dir("C:\DSP_Systems\Adaptive_filter_all\Debug")
 	.global	coef
 	.sect	".fardata:coef", RW
 	.clink
@@ -126,7 +127,7 @@ $C$DW$1	.dwtag  DW_TAG_variable, DW_AT_name("coef")
 	.dwattr $C$DW$1, DW_AT_decl_file("../lowcoefficients.c")
 	.dwattr $C$DW$1, DW_AT_decl_line(0x03)
 	.dwattr $C$DW$1, DW_AT_decl_column(0x07)
-;	C:\ti\ccsv6\tools\compiler\ti-cgt-c6000_8.0.1\bin\acpia6x.exe -@C:\\Users\\dr15755\\AppData\\Local\\Temp\\0612814 
+;	C:\DSP_Systems\bin\opt6x.exe C:\\Users\\pk0300\\AppData\\Local\\Temp\\168802 C:\\Users\\pk0300\\AppData\\Local\\Temp\\168804 
 
 ;******************************************************************************
 ;* BUILD ATTRIBUTES                                                           *

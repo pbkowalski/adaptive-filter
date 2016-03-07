@@ -10,6 +10,8 @@ int Ela=0;
 
 #pragma DATA_ALIGN(hla,8)
 #pragma DATA_ALIGN(Xla,8)
+extern int LinearAssembly1(short *a, short *c, int f,short g,int h, int p);
+
 
 LMS_C_Linear (short newvalue)
 {

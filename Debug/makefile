@@ -4,14 +4,18 @@
 
 SHELL = cmd.exe
 
-CG_TOOL_ROOT := C:/ti/ccsv6/tools/compiler/ti-cgt-c6000_8.0.1
+CG_TOOL_ROOT := C:/DSP_Systems
 
 GEN_OPTS__FLAG := --cmd_file="configPkg/compiler.opt"
 GEN_CMDS__FLAG := -l"configPkg/linker.cmd"
 
 ORDERED_OBJS += \
+"./Adaptativelinear.obj" \
 "./Adaptive.obj" \
 "./Adaptive_C.obj" \
+"./LMSCLinear1.obj" \
+"./adaptativelinear2.obj" \
+"./adaptativelinear3.obj" \
 "./lowcoefficients.obj" \
 "./main.obj" \
 $(GEN_CMDS__FLAG) \
@@ -138,13 +142,13 @@ all: Adaptive_filter_all.out
 Adaptive_filter_all.out: $(OBJS) $(GEN_CMDS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: C6000 Linker'
-	"C:/ti/ccsv6/tools/compiler/ti-cgt-c6000_8.0.1/bin/cl6x" -mv6600 --abi=eabi --opt_for_speed=0 -g --display_error_number --diag_wrap=off --diag_warning=225 --profile:breakpt --auto_inline=0 -k --output_all_syms -z -m"Adaptive_filter_all.map" -i"C:/ti/ccsv6/tools/compiler/ti-cgt-c6000_8.0.1/lib" -i"C:/davidc/Adaptive_filter_all" -i"C:/ti/ccsv6/tools/compiler/ti-cgt-c6000_8.0.1/include" --reread_libs --display_error_number --diag_wrap=off --warn_sections --xml_link_info="Adaptive_filter_all_linkInfo.xml" --rom_model -o "Adaptive_filter_all.out" $(ORDERED_OBJS)
+	"C:/DSP_Systems/bin/cl6x" -mv6600 --abi=eabi -O2 --opt_for_speed=0 -g --display_error_number --diag_warning=225 --diag_wrap=off --profile:breakpt --auto_inline=0 -k --output_all_syms -z -m"Adaptive_filter_all.map" -i"C:/DSP_Systems/lib" -i"C:/DSP_Systems/Adaptive_filter_all" -i"C:/DSP_Systems/include" --reread_libs --warn_sections --display_error_number --diag_wrap=off --xml_link_info="Adaptive_filter_all_linkInfo.xml" --rom_model -o "Adaptive_filter_all.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 Adaptive_filter_all.hex: $(EXE_OUTPUTS)
 	@echo 'Invoking: C6000 Hex Utility'
-	"C:/ti/ccsv6/tools/compiler/ti-cgt-c6000_8.0.1/bin/hex6x"  -o "Adaptive_filter_all.hex" $(EXE_OUTPUTS__QUOTED)
+	"C:/DSP_Systems/bin/hex6x"  -o "Adaptive_filter_all.hex" $(EXE_OUTPUTS__QUOTED)
 	@echo 'Finished building: $@'
 	@echo ' '
 
@@ -152,8 +156,9 @@ Adaptive_filter_all.hex: $(EXE_OUTPUTS)
 clean:
 	-$(RM) $(GEN_MISC_FILES__QUOTED)$(EXE_OUTPUTS__QUOTED)$(GEN_FILES__QUOTED)$(BIN_OUTPUTS__QUOTED)$(GEN_OPTS__QUOTED)$(GEN_CMDS__QUOTED)
 	-$(RMDIR) $(GEN_MISC_DIRS__QUOTED)
-	-$(RM) "Adaptive.pp" "Adaptive_C.pp" "lowcoefficients.pp" "main.pp" 
-	-$(RM) "Adaptive.obj" "Adaptive_C.obj" "lowcoefficients.obj" "main.obj" 
+	-$(RM) "Adaptive.pp" "Adaptive_C.pp" "LMSCLinear1.pp" "lowcoefficients.pp" "main.pp" 
+	-$(RM) "Adaptativelinear.obj" "Adaptive.obj" "Adaptive_C.obj" "LMSCLinear1.obj" "adaptativelinear2.obj" "adaptativelinear3.obj" "lowcoefficients.obj" "main.obj" 
+	-$(RM) "Adaptativelinear.pp" "adaptativelinear2.pp" "adaptativelinear3.pp" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

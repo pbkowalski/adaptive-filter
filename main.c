@@ -7,7 +7,7 @@
 #define	LENGTH 1024
 #define COUNT	8
 
-extern int LinearAssembly1(short *a, short *c, int f,short g,int h, int p);
+//extern int LinearAssembly1(short *a, short *c, int f,short g,int h, int p);
 //extern int LinearAssembly2(short a, int c);
 //extern int LinearAssembly3(short b, int e);
 //extern int LinearAssembly4(short h, short *g, short *i, int j);
@@ -16,7 +16,7 @@ short sinegen(void);
 extern short LMS_isrNoOpt(short newvalue);
 extern short LMS_isr_C(short newvalue);
 extern short LMS_C_Linear(short newvalue);
-long DSP_firlms2(short newvalue);
+//long DSP_firlms2(short newvalue);
 
 short Input_Data;
 short Output_Data1;
@@ -48,7 +48,7 @@ main() {
 			
 			// C Code: no optimization
 			timeStart = MY_TIME_FUNCTION;
-			Output_Data1 = DSP_firlms2(Input_Data); // LMS_isrNoOpt(Input_Data);
+	//		Output_Data1 = DSP_firlms2(Input_Data); // LMS_isrNoOpt(Input_Data);
 			timeEnd = MY_TIME_FUNCTION;
 			timeNoOpt = timeEnd-timeStart;
 			
