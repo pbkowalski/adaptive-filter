@@ -14,6 +14,7 @@ short filter1(short newvalue);
 short filter2(short newvalue);
 extern short LMS_isrNoOpt(short newvalue);
 extern short LMS_isrOpt(short newvalue);
+extern short LMS_isrOptsa(short newvalue);
 
 short Input_Data;
 short Output_Data1;
@@ -69,7 +70,7 @@ extern short coef[80];
 
 main() {
 	short i;
-	unsigned int timeNoOpt,timeOpt, timeStart,timeEnd;
+	unsigned int timeNoOpt,timeOpt, timeOptSa, timeStart,timeEnd;
 
 	while (!force) {
 		for (i = 0; i < LENGTH; i++) {
@@ -88,6 +89,12 @@ main() {
 			timeEnd = MY_TIME_FUNCTION;
 			timeOpt = timeEnd-timeStart;
 
+			timeStart = MY_TIME_FUNCTION;
+	//		Output_Data5 = LMS_isrOptsa(Input_Data);
+			timeEnd = MY_TIME_FUNCTION;
+			timeOptSa = timeEnd-timeStart;
+
+
 			buffer0[i] = Input_Data;
 			buffer1[i] = Output_Data1;
 			buffer2[i] = Output_Data2;
@@ -102,6 +109,7 @@ main() {
 
 				printf("\nC Code w/o code Optimisation:      %d cycles\n",timeNoOpt);
 				printf("\nC Code /w code Optimisation:      %d cycles\n",timeOpt);
+				printf("\nLA Code /w code Optimisation:      %d cycles\n",timeOptSa);
 
 
 		}

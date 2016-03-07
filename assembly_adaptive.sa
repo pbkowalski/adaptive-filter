@@ -1,0 +1,25 @@
+
+
+ 			.global LMS_isrOptsa
+
+LMS_isrOptsa	.cproc	ap
+;				.reg	a, x, prod, y
+
+;				zero	y
+
+
+;loop
+;
+;		ldh		*ap++, a
+;		ldh		*xp++, x
+;		mpy		a, x, prod
+;		add 	prod, y, y
+;		sub		cnt, 1, cnt
+; [cnt]	b  		loop
+
+
+
+	.return ap
+ 		.endproc
+
+
