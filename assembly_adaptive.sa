@@ -2,16 +2,17 @@
 
  			.global LMS_isrOptsa
 
-LMS_isrOptsa	.cproc	hp, xp, xp2, hp2, beta, cntr, cntr2, newval
-;passing pointers twice as we are constrained by speed rather than number of registers
+LMS_isrOptsa	.cproc	hp, xp, beta, cntr, cntr2, newval
+;passing counters twice as we are constrained by speed rather than number of registers
 		.reg	e, beta_e, a, b, p0, p1, sum0, sum1, y, deltah, newdelta, x_temp1, x_temp2
 ;Load the newval into the first position in the input array X
 		zero sum0
 		zero sum1
-
+	.mptr hp, x, 8
+	.mptr xp, x, 8
 	STH newval, *xp
 ;Calc 1, Loop1 - dot product
-LOOP1:	.trip 4,4
+LOOP1:	.trip 4,4 ;executes 4 times
 		LDW *hp++,a ; load ai & a1 from memory
 		LDW *xp++,b ; load bi & b1 from memory
 		MPY a,b,p0 ; ai * bi
@@ -31,7 +32,7 @@ LOOP1:	.trip 4,4
 
 ; second loop -> h_new = h + x*b_e
 	PACK2 beta_e, beta_e, beta_e ; pack 2 16-bit beta_e's into a 32-bit register
-LOOP2:	.trip 4,4
+LOOP2:	.trip 4,4 ;executes 4 times
 
 		LDW *--hp,a ; load hi & hi+1 from memory
 		LDW *--xp,b ; load xi & xi+1 from memory
@@ -48,9 +49,6 @@ LOOP2:	.trip 4,4
 		STW newdelta, *hp ;need to check how to reference correct offset
 		PACKLH2 x_temp2, x_temp1, x_temp1
 		STW x_temp1, *xp
-
-		;X_opt32[i]=_packlh2(X_opt32[i],X_opt32[i-1]);
-
 		[cntr2] SUB cntr2,1,cntr2 ; decrement loop counter
 		[cntr2] B LOOP2 ; branch to loop
 
