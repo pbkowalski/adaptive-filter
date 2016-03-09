@@ -16,6 +16,7 @@ extern short LMS_isrNoOpt(short newvalue);
 extern short LMS_isrOpt(short newvalue);
 extern short LMS_isrOptsa(short *h, short *x, short beta, short cntr, short cntr2, short newvalue);
 extern short LMS_isrOpt2sa(short *h, short *x, short beta, short cntr, short cntr2, short newvalue);
+extern short LMS_isrOpt3sa(short *h, short *x, short beta, short cntr, short cntr2, short newvalue);
 short Input_Data;
 short Output_Data1;
 short Output_Data2;
@@ -35,7 +36,7 @@ short X_sa[8] = {0,0,0,0,0,0,0,0};
 short h_sa[8] = {0,0,0,0,0,0,0,0};
 #pragma DATA_ALIGN(h_sa,8)
 
-short X_sa2[8] = {0,0,0,0,0,0,0,0};
+short X_sa2[8] = {0,0,0,0,0,0,0,0}; //debugging - use initital values to speed it up
 #pragma DATA_ALIGN(X_sa2,8)
 short h_sa2[8] = {0,0,0,0,0,0,0,0};
 #pragma DATA_ALIGN(h_sa2,8)
@@ -113,9 +114,16 @@ main() {
 			timeOptSa = timeEnd-timeStart;
 
 			timeStart = MY_TIME_FUNCTION;
-			Output_Data6 = LMS_isrOpt2sa(h_sa2, X_sa2, _beta, (_N/2), (_N/2), Input_Data);
+			//Output_Data6 = LMS_isrOpt2sa(h_sa2, X_sa2, _beta, (_N/2), (_N/2), Input_Data);
+			timeEnd = MY_TIME_FUNCTION;
+
+			timeStart = MY_TIME_FUNCTION;
+			Output_Data6 = LMS_isrOpt3sa(h_sa2, X_sa2, _beta, (_N/2), (_N/2), Input_Data);
 			timeEnd = MY_TIME_FUNCTION;
 			timeSa2 = timeEnd-timeStart;
+
+
+
 			timeStart = MY_TIME_FUNCTION;
 			timeEnd = MY_TIME_FUNCTION;
 			timeNothing = timeEnd-timeStart;
