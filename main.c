@@ -14,8 +14,9 @@ short filter1(short newvalue);
 short filter2(short newvalue);
 extern short LMS_isrNoOpt(short newvalue);
 extern short LMS_isrOpt(short newvalue);
-extern short LMS_isrOptsa(short newvalue);
-
+extern short LMS_isrOptsa(short *h, short *x, short beta, short cntr, short cntr2, short newvalue);
+extern short LMS_isrOpt2sa(short *h, short *x, short beta, short cntr, short cntr2, short newvalue);
+extern short LMS_isrOpt3sa(short *h, short *x, short beta, short newvalue);
 short Input_Data;
 short Output_Data1;
 short Output_Data2;
@@ -30,6 +31,15 @@ short A = 32364;
 short z[3] = { 0, 4750, 0 };
 short B = 31164;
 
+short X_sa[8] = {0,0,0,0,0,0,0,0};
+#pragma DATA_ALIGN(X_sa,8)
+short h_sa[8] = {0,0,0,0,0,0,0,0};
+#pragma DATA_ALIGN(h_sa,8)
+
+short X_sa2[8] = {0,0,0,0,0,0,0,0}; //debugging - use initital values to speed it up
+#pragma DATA_ALIGN(X_sa2,8)
+short h_sa2[8] = {0,0,0,0,0,0,0,0};
+#pragma DATA_ALIGN(h_sa2,8)
 short buffer0[LENGTH];
 short buffer1[LENGTH];
 short buffer2[LENGTH];
@@ -38,7 +48,13 @@ short buffer4[LENGTH];
 short buffer5[LENGTH];
 short buffer6[LENGTH];
 short buffer7[LENGTH];
+#ifndef _N
+	#define _N 8
+#endif
 
+#ifndef _beta
+	#define _beta 0x00000174
+#endif
 int my_pE=0;
 // For assembly
 short my_ph[8]={0,0,0,0,0,0,0,0}; // Latest 8 output approaches of the adaptive filter
@@ -70,7 +86,7 @@ extern short coef[80];
 
 main() {
 	short i;
-	unsigned int timeNoOpt,timeOpt, timeOptSa, timeStart,timeEnd;
+	unsigned int timeNoOpt,timeOpt, timeSa3, timeStart,timeEnd, timeNothing, timeSa2;
 
 	while (!force) {
 		for (i = 0; i < LENGTH; i++) {
@@ -79,6 +95,9 @@ main() {
 			Output_Data2 = filter2(Input_Data);
 			
 			// C Code: no optimization
+			if (i==5){
+				printf("break");
+			}
 			timeStart = MY_TIME_FUNCTION;
 			Output_Data3 = LMS_isrNoOpt(Input_Data);
 			timeEnd = MY_TIME_FUNCTION;
@@ -89,11 +108,26 @@ main() {
 			timeEnd = MY_TIME_FUNCTION;
 			timeOpt = timeEnd-timeStart;
 
-			timeStart = MY_TIME_FUNCTION;
-	//		Output_Data5 = LMS_isrOptsa(Input_Data);
-			timeEnd = MY_TIME_FUNCTION;
-			timeOptSa = timeEnd-timeStart;
+//			timeStart = MY_TIME_FUNCTION;
+//			Output_Data5 = LMS_isrOptsa(h_sa, X_sa, _beta, (_N/2), (_N/2), Input_Data);
+//			timeEnd = MY_TIME_FUNCTION;
+//			timeOptSa = timeEnd-timeStart;
 
+			timeStart = MY_TIME_FUNCTION;
+			Output_Data6 = LMS_isrOpt2sa(h_sa, X_sa, _beta, (_N/2), (_N/2), Input_Data);
+			timeEnd = MY_TIME_FUNCTION;
+			timeSa2 = timeEnd-timeStart;
+
+			timeStart = MY_TIME_FUNCTION;
+			Output_Data6 = LMS_isrOpt3sa(h_sa2, X_sa2, _beta, Input_Data);
+			timeEnd = MY_TIME_FUNCTION;
+			timeSa3 = timeEnd-timeStart;
+
+
+
+			timeStart = MY_TIME_FUNCTION;
+			timeEnd = MY_TIME_FUNCTION;
+			timeNothing = timeEnd-timeStart;
 
 			buffer0[i] = Input_Data;
 			buffer1[i] = Output_Data1;
@@ -109,7 +143,9 @@ main() {
 
 				printf("\nC Code w/o code Optimisation:      %d cycles\n",timeNoOpt);
 				printf("\nC Code /w code Optimisation:      %d cycles\n",timeOpt);
-				printf("\nLA Code /w code Optimisation:      %d cycles\n",timeOptSa);
+				printf("\n Linear assembly code - light optimisation      %d cycles\n",timeSa2);
+				printf("\n Linear assembly code - heavy optimisation:      %d cycles\n",timeSa3);
+				printf("Timing overhead:      %d cycles\n",timeNothing);
 
 
 		}

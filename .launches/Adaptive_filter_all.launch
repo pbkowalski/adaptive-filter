@@ -48,7 +48,7 @@
 <stringAttribute key="com.ti.ccstudio.debug.debugModel.MRU_PROGRAM.Blackhawk XDS560v2-USB Mezzanine Emulator_0/C66xx_6" value="C:/DSP_Systems\Adaptive_filter_all\Debug\Adaptive_filter_all.out"/>
 <stringAttribute key="com.ti.ccstudio.debug.debugModel.MRU_PROGRAM.Blackhawk XDS560v2-USB Mezzanine Emulator_0/C66xx_7" value="C:/DSP_Systems\Adaptive_filter_all\Debug\Adaptive_filter_all.out"/>
 <mapAttribute key="com.ti.ccstudio.debug.ui.displayFormats">
-<mapEntry key="Blackhawk XDS560v2-USB Mezzanine Emulator_0/C66xx_0@##separator##@0" value="32-Bit Hex - TI Style"/>
+<mapEntry key="Blackhawk XDS560v2-USB Mezzanine Emulator_0/C66xx_0@##separator##@0" value="64-Bit Hex - TI Style"/>
 </mapAttribute>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
 <listEntry value="/Adaptive_filter_all"/>

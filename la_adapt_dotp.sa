@@ -1,0 +1,80 @@
+
+
+
+
+
+
+ 			.global LMS_isrOpt3sa
+
+LMS_isrOpt3sa	.cproc	hp, xp, beta, newval
+;passing counters twice as we are constrained by speed rather than number of registers
+		.reg	e, beta_e, a, b, p0, p1, sum0, sum1, y, newdelta, x_temp1, x_temp2, xoldp, holdp
+		.reg x2, x1, x3, x4, h2, h1, h3, h4, o1, o2, o3, o4, o5, o6, o7, o8, deltah1, deltah2, deltah3, deltah4, newdelta1, newdelta2, newdelta3, newdelta4
+		.mptr hp, y, 8
+		.mptr xp, y, 8
+;Store the newval into the first position in the input array X
+	STH newval, *xp
+	;zero sums
+	zero sum0
+	zero sum1
+
+
+;Calc 1 - dot product
+	LDDW *xp++, x1:x2
+	LDDW *hp++, h1:h2
+	LDDW *xp++, x3:x4
+	LDDW *hp++, h3:h4
+	DOTP4H x1:x2, h1:h2, o1:o2
+	DOTP4H x3:x4, h3:h4, o3:o4
+	ADD o1, o2, sum0
+	ADD o3, o4, sum1
+	ADD sum0, sum1, sum0
+	SHR sum0, (15), y
+
+
+; Calc 2 - calculate error and beta_e
+	SUB newval, y, e ;
+	MPY beta, e, beta_e ; beta*e=beta_e(32)
+	SHR beta_e, (15), beta_e; ; to allow 16 bit arithmetic
+;	SHR beta_e, (14), beta_e; ;
+	PACK2 beta_e, beta_e, beta_e ; pack 2 16-bit beta_e's into a 32-bit register for add2
+
+; second calc -> h_new = h + x*b_e
+;changed mpy2 to smpy2 - should work unless saturation?
+	SMPY2 beta_e, x2, o1:o2
+	SMPY2 beta_e, x1, o3:o4
+	SMPY2 beta_e, x4, o5:o6
+	SMPY2 beta_e, x3, o7:o8
+;	SHR o1, (15), o1
+;	SHR o2, (15), o2
+;	SHR o3, (15), o3
+;	SHR o4, (15), o4
+;	SHR o5, (15), o5
+;	SHR o6, (15), o6
+;	SHR o7, (15), o7
+;	SHR o8, (15), o8
+;changed pack2 to packh2
+	PACKH2 o1, o2, deltah1 ; for add2 addition
+	PACKH2 o3, o4, deltah2 ; for add2 addition
+	PACKH2 o5, o6, deltah3 ; for add2 addition
+	PACKH2 o7, o8, deltah4 ; for add2 addition
+	ADD2 h2, deltah1, newdelta1
+	ADD2 h1, deltah2, newdelta2
+	ADD2 h4, deltah3, newdelta3
+	ADD2 h3, deltah4, newdelta4
+	STDW newdelta4:newdelta3, *--hp
+	STDW newdelta2:newdelta1, *--hp
+	PACKLH2 x3, x4, x3
+	PACKLH2 x4, x1, x4
+	PACKLH2 x1, x2, x1 ;note the ordering w.r.t. array : xi[h,l] -> x2(1,0),x1(3,2),x4(5,4),x3(7,6)
+	PACKLH2 x2, x2, x2 ;0th index will be overwritten anyway - can stay unchanged
+	STDW x3:x4, *--xp
+	STDW x1:x2, *--xp
+
+
+
+	.return y
+ 		.endproc
+
+
+

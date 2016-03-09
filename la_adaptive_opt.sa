@@ -1,31 +1,43 @@
 
 
- 			.global LMS_isrOptsa
+ 			.global LMS_isrOpt2sa
 
-LMS_isrOptsa	.cproc	hp, xp, beta, cntr, cntr2, newval
+LMS_isrOpt2sa	.cproc	hp, xp, beta, cntr, cntr2, newval
 ;passing counters twice as we are constrained by speed rather than number of registers
-		.reg	e, beta_e, a, b, p0, p1, sum0, sum1, y, deltah, newdelta, x_temp1, x_temp2
-;Load the newval into the first position in the input array X
-		zero sum0
-		zero sum1
-	.mptr hp, x, 8
-	.mptr xp, x, 8
+		.reg	e, beta_e, a, b, p0, p1, sum0, sum1, y, deltah, newdelta, x_temp1, x_temp2, xoldp, holdp
+		.mptr hp, y, 8
+		.mptr xp, y, 8
+;Store the newval into the first position in the input array X
 	STH newval, *xp
+	;zero sums
+	zero sum0
+	zero sum1
+;Preload to avoid NOPs
+	LDW *hp,a ; load ai & a1 from memory
+	LDW *xp,b ; load bi & b1 from memory
+
+
+
 ;Calc 1, Loop1 - dot product
 LOOP1:	.trip 4,4 ;executes 4 times
-		LDW *hp++,a ; load ai & a1 from memory
-		LDW *xp++,b ; load bi & b1 from memory
 		MPY a,b,p0 ; ai * bi
 		MPYH a,b,p1 ; ai+1 * bi+1
+		;Load x&h for the next iteration already (as soon as a and b registers are made redundant)
+		LDW *++hp,a ; load ai & a1 from memory
+		LDW *++xp,b ; load bi & b1 from memory
 		ADD p0,sum0,sum0 ; sum0 += (ai * bi)
 		ADD p1,sum1,sum1 ; sum1 += (ai+1 * bi+1)
 		[cntr] SUB cntr,1,cntr ; decrement loop counter
 		[cntr] B LOOP1 ; branch to loop
+;end of loop
 		ADD sum0, sum1, sum0
+		LDW *--hp,a ; load hi & hi+1 from memory
 		SHR sum0, (15), y ; dot product of 16 bit values is 32 bit, need to left shift as the result has to be contained in a short
+;Preload to avoid NOPs
 
 ; Calc 2 - calculate error and beta_e
 	SUB newval, y, e ; y-newval = e
+			LDW *--xp,b ; load xi & xi+1 from memory
 	MPY beta, e, beta_e ; beta*e=beta_e(32)
 	SHR beta_e, (15), beta_e; ; to allow 16 bit arithmetic
 
@@ -34,23 +46,27 @@ LOOP1:	.trip 4,4 ;executes 4 times
 	PACK2 beta_e, beta_e, beta_e ; pack 2 16-bit beta_e's into a 32-bit register
 LOOP2:	.trip 4,4 ;executes 4 times
 
-		LDW *--hp,a ; load hi & hi+1 from memory
-		LDW *--xp,b ; load xi & xi+1 from memory
 		MPY b, beta_e, p0;beta_e*xi
 		MPYH b, beta_e, p1;beta_e*xi+1
+		MV xp, xoldp
+
 		SHR p0, (15), p0 ; product of 16 bit values is 32 bit, need to left shift as the result has to be contained in a short
 		SHR p1, (15), p1 ; product of 16 bit values is 32 bit, need to left shift as the result has to be contained in a short
 		; shift the x array
-		LDW *--xp,x_temp1
-		LDW *++xp, x_temp2
+
+		LDW *--xp,x_temp1 ;load x-1 values
 
 		PACK2 p1, p0, deltah ; for add2 addition
+		MV hp, holdp
 		ADD2 a, deltah, newdelta ;
-		STW newdelta, *hp ;need to check how to reference correct offset
-		PACKLH2 x_temp2, x_temp1, x_temp1
-		STW x_temp1, *xp
+		LDW *--hp,a ; load hi & hi+1 from memory for next loop iteration as soon as 'a' is 'redundant'
+		STW newdelta, *holdp ;faster in implementation (with mv's) than referencing the correct offset
+		PACKLH2 b, x_temp1, x_temp2
+		STW x_temp2, *xoldp
+		MV x_temp1, b ;store the x values to be used in the next iteration into b register
 		[cntr2] SUB cntr2,1,cntr2 ; decrement loop counter
 		[cntr2] B LOOP2 ; branch to loop
+;end of loop
 
 
 	.return y
