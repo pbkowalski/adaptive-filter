@@ -16,7 +16,7 @@ extern short LMS_isrNoOpt(short newvalue);
 extern short LMS_isrOpt(short newvalue);
 extern short LMS_isrOptsa(short *h, short *x, short beta, short cntr, short cntr2, short newvalue);
 extern short LMS_isrOpt2sa(short *h, short *x, short beta, short cntr, short cntr2, short newvalue);
-extern short LMS_isrOpt3sa(short *h, short *x, short beta, short cntr, short cntr2, short newvalue);
+extern short LMS_isrOpt3sa(short *h, short *x, short beta, short newvalue);
 short Input_Data;
 short Output_Data1;
 short Output_Data2;
@@ -86,7 +86,7 @@ extern short coef[80];
 
 main() {
 	short i;
-	unsigned int timeNoOpt,timeOpt, timeOptSa, timeStart,timeEnd, timeNothing, timeSa2;
+	unsigned int timeNoOpt,timeOpt, timeSa3, timeStart,timeEnd, timeNothing, timeSa2;
 
 	while (!force) {
 		for (i = 0; i < LENGTH; i++) {
@@ -108,19 +108,20 @@ main() {
 			timeEnd = MY_TIME_FUNCTION;
 			timeOpt = timeEnd-timeStart;
 
-			timeStart = MY_TIME_FUNCTION;
-			Output_Data5 = LMS_isrOptsa(h_sa, X_sa, _beta, (_N/2), (_N/2), Input_Data);
-			timeEnd = MY_TIME_FUNCTION;
-			timeOptSa = timeEnd-timeStart;
+//			timeStart = MY_TIME_FUNCTION;
+//			Output_Data5 = LMS_isrOptsa(h_sa, X_sa, _beta, (_N/2), (_N/2), Input_Data);
+//			timeEnd = MY_TIME_FUNCTION;
+//			timeOptSa = timeEnd-timeStart;
 
 			timeStart = MY_TIME_FUNCTION;
-			//Output_Data6 = LMS_isrOpt2sa(h_sa2, X_sa2, _beta, (_N/2), (_N/2), Input_Data);
-			timeEnd = MY_TIME_FUNCTION;
-
-			timeStart = MY_TIME_FUNCTION;
-			Output_Data6 = LMS_isrOpt3sa(h_sa2, X_sa2, _beta, (_N/2), (_N/2), Input_Data);
+			Output_Data6 = LMS_isrOpt2sa(h_sa, X_sa, _beta, (_N/2), (_N/2), Input_Data);
 			timeEnd = MY_TIME_FUNCTION;
 			timeSa2 = timeEnd-timeStart;
+
+			timeStart = MY_TIME_FUNCTION;
+			Output_Data6 = LMS_isrOpt3sa(h_sa2, X_sa2, _beta, Input_Data);
+			timeEnd = MY_TIME_FUNCTION;
+			timeSa3 = timeEnd-timeStart;
 
 
 
@@ -142,8 +143,8 @@ main() {
 
 				printf("\nC Code w/o code Optimisation:      %d cycles\n",timeNoOpt);
 				printf("\nC Code /w code Optimisation:      %d cycles\n",timeOpt);
-				printf("\nLA Code /w code Optimisation:      %d cycles\n",timeOptSa);
-				printf("\n Hard LA Code /w code Optimisation:      %d cycles\n",timeSa2);
+				printf("\n Linear assembly code - light optimisation      %d cycles\n",timeSa2);
+				printf("\n Linear assembly code - heavy optimisation:      %d cycles\n",timeSa3);
 				printf("Timing overhead:      %d cycles\n",timeNothing);
 
 
